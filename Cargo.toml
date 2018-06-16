@@ -1,0 +1,8 @@
+[package]
+name = "chrome-game"
+version = "0.1.0"
+authors = ["josh <jlong2@ramapo.edu>"]
+
+[dependencies]
+termion = "1"
+rand= "0.3"
