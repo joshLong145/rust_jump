@@ -2,6 +2,8 @@
 extern crate termion;
 extern crate rand;
 
+mod bst;
+
 use termion::raw::IntoRawMode;
 use std::io::{Read, Write, stdout, Error};
 use termion::async_stdin;
@@ -122,8 +124,8 @@ fn drawenemes(_enemies: &Vec<Obj>) {
 }
 
 
-// helper fib fuunction to generat a nice background.
-fn generatebackground(_terminal_coords: &mut Result<(u16,u16),Error>) -> Vec<(u16,u16)>{
+// helper function to generat a nice background.
+fn generatebackgroundInstance(_terminal_coords: &mut Result<(u16,u16),Error>) -> Vec<(u16,u16)>{
     // object used to return from function
     let mut vec: Vec<(u16,u16)> = Vec::new();
     match _terminal_coords{
@@ -135,15 +137,24 @@ fn generatebackground(_terminal_coords: &mut Result<(u16,u16),Error>) -> Vec<(u1
                let p3 = rand::thread_rng().gen_range(0,(d.1 - 4) / 2);
                let p4 = rand::thread_rng().gen_range((d.1 -4) /2, d.1);
 
+               // add randonmly generated points to the vector of data points to be displayed within another module.
                for _i in 0..rand::thread_rng().gen_range(1, 5){
-                   vec.push((rand::thread_rng().gen_range(p1, p2), rand::thread_rng().gen_range(p3,p4)));
+                   vec.push((rand::thread_rng().gen_range(p1, p2), rand::thread_rng().gen_range(p3,p4))); 
                }
            }
            vec
         },
-        Err(e) => panic!("Error: {}",e),
+        Err(e) => panic!("Error: {}", e), //  On error we dump to the standard err output buffer.
     }
 }
+
+fn genarateBackgroundTree() -> Vec<(u16, u16)>{
+        let mut tree: bst::Tree<Vec<(u16, u16)>> = bst::Tree::new();
+        let mut vec: Vec<(u16,u16)> = Vec::new();
+
+        vec
+}
+
 fn main() {
     //need to check if tty is supported on the current Running OS. 
     if !termion::is_tty(&fs::File::create("/dev/stdout").unwrap()) {
@@ -178,7 +189,7 @@ fn main() {
 
     let mut enemies: Vec<Obj> = Vec::new();
 
-    let mut stars: Vec<(u16,u16)> = generatebackground(&mut terminal_dimension);
+    let mut stars: Vec<(u16,u16)> = generatebackgroundInstance(&mut terminal_dimension);
 
     // start the timer for the game clock.
     let timer = SystemTime::now();
